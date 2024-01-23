@@ -47,27 +47,28 @@ namespace FlaskeAutomaten_Threads
                 {
                     while (mainBuffer.Count > 0)
                     {
-                        Write("Producer Waiting", ConsoleColor.DarkGreen);
-                        //Console.ForegroundColor = ConsoleColor.DarkGreen;
-                        //Console.WriteLine("Producer Waiting");
+                        Write("Producer Waiting", ConsoleColor.DarkRed);
                         Monitor.Wait(mainBufferLock);
+                        Write("Producer Starting", ConsoleColor.Blue);
                     }
                     for (int i = 0; i < 10; i++)
                     {
-                        Write($"Producing item {i + 1}", ConsoleColor.Green);
+                        Beverage beverage;
                         if (rng.Next(1, 3) == 1)
                         {
-                            mainBuffer.Enqueue(new Beverage("Beer", 1));
+                            beverage = new Beverage("Beer", 1);
                         }
                         else
                         {
-                            mainBuffer.Enqueue(new Beverage("Soda", 1));
+                            beverage = new Beverage("Soda", 2);
                         }
-                        Thread.Sleep(300); // Simulate some work
+                        mainBuffer.Enqueue(beverage);
+                        Write($"Producing item {beverage.Type} {i +1}", ConsoleColor.Green);
+                        Thread.Sleep(300);
                     }
                     Monitor.Pulse(mainBufferLock);
                 }
-                Thread.Sleep(300); // Simulate some work
+                Thread.Sleep(50);
             }
         }
         static void Splitter()
@@ -78,8 +79,9 @@ namespace FlaskeAutomaten_Threads
                 {
                     while (mainBuffer.Count < 1)
                     {
-                        Write("Splitter Waiting", ConsoleColor.DarkYellow);
+                        Write("Splitter Waiting", ConsoleColor.DarkRed);
                         Monitor.Wait(mainBufferLock);
+                        Write("Splitter Starting", ConsoleColor.Blue);
                     }
                     while (mainBuffer.Count > 0)
                     {
@@ -88,7 +90,7 @@ namespace FlaskeAutomaten_Threads
                         {
                             lock (buffer1Lock)
                             {
-                                Write($"Splitting item {beverage.Type} to buffer 1", ConsoleColor.Yellow);
+                                Write($"Splitting item {beverage.Type} to Beer buffer", ConsoleColor.Yellow);
                                 buffer1.Enqueue(beverage);
                                 Monitor.Pulse(buffer1Lock);
                             }
@@ -97,7 +99,7 @@ namespace FlaskeAutomaten_Threads
                         {
                             lock (buffer2Lock)
                             {
-                                Write($"Splitting item {beverage.Type} to buffer 2", ConsoleColor.Yellow);
+                                Write($"Splitting item {beverage.Type} to Soda buffer", ConsoleColor.Yellow);
                                 buffer2.Enqueue(beverage);
                                 Monitor.Pulse(buffer2Lock);
                             }
@@ -106,7 +108,7 @@ namespace FlaskeAutomaten_Threads
                     }
                     Monitor.Pulse(mainBufferLock);
                 }
-                Thread.Sleep(300);
+                Thread.Sleep(50);
             }
         }
         static void Consumer1()
@@ -119,16 +121,17 @@ namespace FlaskeAutomaten_Threads
                     {
                         Write("Consumer1 Waiting", ConsoleColor.DarkRed);
                         Monitor.Wait(buffer1Lock);
+                        Write("Consumer1 Starting", ConsoleColor.Blue);
 
                     }
                     while (buffer1.Count > 0)
                     {
                         Beverage beverage = buffer1.Dequeue();
-                        Write($"Consuming from Buffer 1: {beverage.Type}", ConsoleColor.Red);
-                        Thread.Sleep(300); // Simulate some work
+                        Write($"Consuming from Beer: {beverage.Type}", ConsoleColor.Red);
+                        Thread.Sleep(300);
                     }
                 }
-                Thread.Sleep(300); // Simulate some work
+                //Thread.Sleep(50);
             }
         }
         static void Consumer2()
@@ -141,16 +144,17 @@ namespace FlaskeAutomaten_Threads
                     {
                         Write("Consumer2 Waiting", ConsoleColor.DarkRed);
                         Monitor.Wait(buffer2Lock);
+                        Write("Consumer2 Starting", ConsoleColor.Blue);
                     }
                     while (buffer2.Count > 0)
                     {
                         Beverage beverage = buffer2.Dequeue();
                         Write($"Consuming from Buffer 2: {beverage.Type}", ConsoleColor.Red);
-                        Thread.Sleep(300); // Simulate some work
+                        Thread.Sleep(300);
                     }
                     Monitor.Pulse(buffer2Lock);
                 }
-                Thread.Sleep(300); // Simulate some work
+                //Thread.Sleep(50);
             }
         }
         static void Write(string startText, ConsoleColor color)
