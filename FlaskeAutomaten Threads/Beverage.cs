@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+ 
 namespace FlaskeAutomaten_Threads
 {
     internal class Beverage
     {
-        public string Type { get; set; }
-        public int TypeId { get; set; }
-        public Beverage(string type, int typeId)
+        public string Name { get; set; }
+        public int Id { get; set; }
+
+        public Beverage(string name, int id)
         {
-            this.Type = type;
-            TypeId = typeId;
+            Name = name;
+            Id = id;
         }
     }
 }
