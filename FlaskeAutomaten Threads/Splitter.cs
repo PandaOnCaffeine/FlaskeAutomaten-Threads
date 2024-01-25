@@ -25,26 +25,17 @@ namespace FlaskeAutomaten_Threads
         {
             while (_running)
             {
-                if (_mainQueue.Count >= _mainQueue._limit)
+                Thread.Sleep(100);
+                Beverage beverage = _mainQueue.Next(_box);
+                if (beverage.Id == 0)
                 {
-                    while (_mainQueue.Count != 0)
-                    {
-                        Beverage beverage = _mainQueue.Next();
-                        if (beverage.Id == 0)
-                        {
-                            _box.WriteAt($"{beverage.Key}|Splitting {beverage.Name} To {_splitterBuffers[0].Name}", ConsoleColor.Yellow);
-                            Thread.Sleep(10);
-                            _mainQueue.Split(_splitterBuffers[0]);
-                        }
-                        else
-                        {
-                            _box.WriteAt($"{beverage.Key}|Splitting {beverage.Name} To {_splitterBuffers[1].Name}", ConsoleColor.Yellow);
-                            Thread.Sleep(10);
-                            _mainQueue.Split(_splitterBuffers[1]);
-                        }
-                        Thread.Sleep(250);
-                    }
-                    Thread.Sleep(250);
+                    _box.WriteAt($"{beverage.Key}|Splitting {beverage.Name} To {_splitterBuffers[0].Name}", ConsoleColor.Yellow);
+                    _mainQueue.Split(_splitterBuffers[0]);
+                }
+                else
+                {
+                    _box.WriteAt($"{beverage.Key}|Splitting {beverage.Name} To {_splitterBuffers[1].Name}", ConsoleColor.Yellow);
+                    _mainQueue.Split(_splitterBuffers[1]);
                 }
             }
         }

@@ -23,28 +23,24 @@ namespace FlaskeAutomaten_Threads
             int key = 1;
             while (_running)
             {
-                while (_queue.Count < _queue._limit)
+                Thread.Sleep(100);
+                Beverage beverage;
+                int randomNr = _random.Next(0, 2);
+                switch (randomNr)
                 {
-                    Beverage beverage;
-                    int randomNr = _random.Next(0, 2);
-                    switch (randomNr)
-                    {
-                        case 0:
-                            beverage = new Beverage("Beer", randomNr, key);
-                            break;
-                        case 1:
-                            beverage = new Beverage("Energy Drink", randomNr, key);
-                            break;
-                        default:
-                            beverage = new Beverage("Fejl", -1, key);
-                            break;
-                    }
-                    _box.WriteAt($"{beverage.Key}|Produced Beverage: {beverage.Name}", ConsoleColor.Green);
-                    Thread.Sleep(250);
-                    _queue.Produce(beverage);
-                    key++;
+                    case 0:
+                        beverage = new Beverage("Beer", randomNr, key);
+                        break;
+                    case 1:
+                        beverage = new Beverage("Energy Drink", randomNr, key);
+                        break;
+                    default:
+                        beverage = new Beverage("Fejl", -1, key);
+                        break;
                 }
-                Thread.Sleep(250);
+                _box.WriteAt($"{beverage.Key}|Produced Beverage: {beverage.Name}", ConsoleColor.Green);
+                _queue.Produce(beverage);
+                key++;
             }
         }
         public void Stop()

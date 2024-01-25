@@ -13,7 +13,6 @@ namespace FlaskeAutomaten_Threads
         private int maxWidth;
         private int maxHeight;
 
-
         private char boxCharacter = '█';
         private int _x;
         private int _y;

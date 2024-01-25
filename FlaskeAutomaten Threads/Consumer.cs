@@ -25,13 +25,9 @@ namespace FlaskeAutomaten_Threads
         {
             while (_running)
             {
-                while (_queue.Count > 0)
-                {
-                    Beverage beverage = _queue.Consume();
-                    _box.WriteAt($"{beverage.Key}|{_name} Consumed {beverage.Name}", ConsoleColor.Red);
-                    Thread.Sleep(250);
-                }
-                Thread.Sleep(250);
+                Beverage beverage = _queue.Consume();
+                _box.WriteAt($"{beverage.Key}|{_name} Consumed {beverage.Name}", ConsoleColor.Red);
+                Thread.Sleep(100);
             }
         }
         public void Stop(bool alive)
