@@ -5,48 +5,50 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
- 
+
 namespace FlaskeAutomaten_Threads
 {
     internal class Producer
     {
         private Buffer _queue;
+        private TextBox _box;
         private bool _running = true;
         private Random _random = new Random();
-        public Producer(Buffer queue)
+        public Producer(Buffer queue, TextBox box)
         {
             _queue = queue;
+            _box = box;
         }
         public void Run()
         {
+            int key = 1;
             while (_running)
             {
-                if (_queue.Count <= 0)
+                while (_queue.Count < _queue._limit)
                 {
-
-                    int amount = _queue._limit;
-                    while (_queue.Count < _queue._limit)
+                    Beverage beverage;
+                    int randomNr = _random.Next(0, 2);
+                    switch (randomNr)
                     {
-                        Beverage beverage;
-                        int randomNr = _random.Next(0, 2);
-                        switch (randomNr)
-                        {
-                            case 0:
-                                beverage = new Beverage("Beer", randomNr);
-                                break;
-                            case 1:
-                                beverage = new Beverage("Energy Drink", randomNr);
-                                break;
-                            default:
-                                beverage = new Beverage("Fejl", -1);
-                                break;
-                        }
-                        _queue.Produce(beverage);
+                        case 0:
+                            beverage = new Beverage("Beer", randomNr, key);
+                            break;
+                        case 1:
+                            beverage = new Beverage("Energy Drink", randomNr, key);
+                            break;
+                        default:
+                            beverage = new Beverage("Fejl", -1, key);
+                            break;
                     }
+                    _box.WriteAt($"{beverage.Key}|Produced Beverage: {beverage.Name}", ConsoleColor.Green);
+                    Thread.Sleep(250);
+                    _queue.Produce(beverage);
+                    key++;
                 }
-                Thread.Sleep(300);
+                Thread.Sleep(250);
             }
         }
+
         public void Stop()
         {
             _running = false;
