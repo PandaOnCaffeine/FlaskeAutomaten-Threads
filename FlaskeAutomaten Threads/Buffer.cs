@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
- 
+
 namespace FlaskeAutomaten_Threads
 {
     internal class Buffer
     {
         private Queue<Beverage> _queue = new Queue<Beverage>();
-
         public int Count
         {
             get { return _queue.Count; }
@@ -32,53 +31,50 @@ namespace FlaskeAutomaten_Threads
             {
                 while (_queue.Count >= _limit)
                 {
+                    Monitor.Pulse(_lock);
                     Monitor.Wait(_lock);
                 }
                 _queue.Enqueue(beverage);
-
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Produced {beverage.Name} In main buffer {_queue.Count}");
-
-                Monitor.Pulse(_lock);
             }
-            Thread.Sleep(200);
         }
-        public void Split(Buffer direction, Beverage beverage)
+        public void Split(Buffer direction)
         {
             lock (_lock)
             {
                 lock (direction._lock)
                 {
-                    if (_queue.Count <= 0)
+                    while (_queue.Count <= 0)
                     {
+                        Monitor.Pulse(_lock);
+                        Monitor.Pulse(direction._lock);
                         Monitor.Wait(_lock);
                     }
-                    else if (direction.Count >= direction._limit)
-                    {
-                         Monitor.Wait(direction._lock);
-                    }
-                    else
-                    {
-                        direction._queue.Enqueue(beverage);
-                    }
+                    Beverage beverage = _queue.Dequeue();
+                    direction._queue.Enqueue(beverage);
                 }
             }
-            Thread.Sleep(300);
         }
-        public Beverage Pull()
+        public Beverage Next()
         {
-            Beverage beverage;
+            lock (_lock)
+            {
+                Beverage beverage;
+                beverage = _queue.Peek();
+                return beverage;
+            }
+        }
+        public Beverage Consume()
+        {
             lock (_lock)
             {
                 while (_queue.Count <= 0)
                 {
-                    Monitor.Pulse(_lock);
                     Monitor.Wait(_lock);
                 }
+                Beverage beverage;
                 beverage = _queue.Dequeue();
+                return beverage;
             }
-            Thread.Sleep(100);
-            return beverage;
         }
         //public Queue<Beverage> Move()
         //{
