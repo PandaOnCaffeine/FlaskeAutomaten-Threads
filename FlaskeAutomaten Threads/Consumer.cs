@@ -12,8 +12,8 @@ namespace FlaskeAutomaten_Threads
         private Buffer _queue;
         private string _name;
         private TextBox _box;
-
         private bool _running = true;
+
         public Consumer(Buffer queue, string name, TextBox box)
         {
             _queue = queue;
@@ -38,7 +38,6 @@ namespace FlaskeAutomaten_Threads
         {
             while (alive)
             {
-
             }
             _running = false;
         }

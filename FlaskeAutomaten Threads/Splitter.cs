@@ -14,8 +14,6 @@ namespace FlaskeAutomaten_Threads
         private bool _running = true;
         private TextBox _box;
 
-
-
         public Splitter(Buffer mainQueue, Buffer[] splitterQueues, TextBox box)
         {
             _mainQueue = mainQueue;
@@ -29,7 +27,6 @@ namespace FlaskeAutomaten_Threads
             {
                 if (_mainQueue.Count >= _mainQueue._limit)
                 {
-                    //Console.WriteLine(_mainQueue.Count + " " + _mainQueue._limit);
                     while (_mainQueue.Count != 0)
                     {
                         Beverage beverage = _mainQueue.Next();
@@ -54,7 +51,6 @@ namespace FlaskeAutomaten_Threads
         public void Stop()
         {
             _running = false;
-
         }
     }
 }

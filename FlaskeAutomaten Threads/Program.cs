@@ -2,17 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-<<<<<<< HEAD
-=======
  
->>>>>>> 97973f6210d2d3dad700c715bd2f3d21f722e713
 
 namespace FlaskeAutomaten_Threads
 {
     class Program
     {
-
-        //static object _writeLock = new object();
         static void Main(string[] args)
         {
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
@@ -20,13 +15,11 @@ namespace FlaskeAutomaten_Threads
 
             object lockObj = new object();
 
-
             TextBox producerBox = new TextBox(40, 10, 5, 5,lockObj);
             TextBox splitterBox = new TextBox(50, 10, 55, 5, lockObj);
 
             TextBox beerBox = new TextBox(40, 10, 5, 20, lockObj);
             TextBox energyBox = new TextBox(40, 10, 55, 20, lockObj);
-
 
             Buffer mainBuffer = new Buffer("Main Buffer", 10);
             Buffer beerBuffer = new Buffer("Beer Buffer", 10);
@@ -40,8 +33,6 @@ namespace FlaskeAutomaten_Threads
 
             Consumer alcoholic = new Consumer(beerBuffer, "Beer", beerBox);
             Consumer teenager = new Consumer(energyDrinkBuffer, "Energy Drink", energyBox);
-
-
 
             Thread producerThread = new Thread(new ThreadStart(producer.Run));
             Thread splitterThread = new Thread(new ThreadStart(splitter.Run));
@@ -68,14 +59,5 @@ namespace FlaskeAutomaten_Threads
 
             Console.ReadLine();
         }
-        // Writing method with color
-        //static void Write(string startText, ConsoleColor color)
-        //{
-        //    lock (_writeLock)
-        //    {
-        //        Console.ForegroundColor = color;
-        //        Console.WriteLine(startText);
-        //    }
-        //}
     }
 }

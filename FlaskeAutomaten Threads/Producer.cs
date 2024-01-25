@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace FlaskeAutomaten_Threads
 {
@@ -48,7 +47,6 @@ namespace FlaskeAutomaten_Threads
                 Thread.Sleep(250);
             }
         }
-
         public void Stop()
         {
             _running = false;

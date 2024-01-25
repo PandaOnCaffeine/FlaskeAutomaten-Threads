@@ -10,11 +10,13 @@ namespace FlaskeAutomaten_Threads
     {
         public string Name { get; set; }
         public int Id { get; set; }
+        public int Key { get; set; }
 
-        public Beverage(string name, int id)
+        public Beverage(string name, int id, int key)
         {
             Name = name;
             Id = id;
+            Key = key;
         }
     }
 }

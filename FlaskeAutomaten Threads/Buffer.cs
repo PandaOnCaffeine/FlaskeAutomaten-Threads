@@ -10,16 +10,10 @@ namespace FlaskeAutomaten_Threads
     internal class Buffer
     {
         private Queue<Beverage> _queue = new Queue<Beverage>();
-        public int Count
-        {
-            get { return _queue.Count; }
-        }
-
-        public int _limit { get; }
         private readonly object _lock = new object();
-
+        public int Count { get { return _queue.Count; } }
+        public int _limit { get; }
         public string Name { get; set; }
-
         public Buffer(string bufferName, int limit)
         {
             Name = bufferName;
@@ -76,26 +70,5 @@ namespace FlaskeAutomaten_Threads
                 return beverage;
             }
         }
-        //public Queue<Beverage> Move()
-        //{
-        //    lock (_lock)
-        //    {
-        //        while (_queue.Count < _limit)
-        //        {
-        //            Monitor.Wait(_lock);
-        //        }
-        //        Queue<Beverage> queue = new Queue<Beverage>();
-
-        //        return _queue;
-        //        Beverage[] beverages = new Beverage[_queue.Count];
-        //        int amount = _queue.Count;
-        //        for (int i = 0; i < amount; i++)
-        //        {
-        //            beverages[i] = _queue.Dequeue();
-        //        }
-        //        Thread.Sleep(100);
-        //        return beverages;
-        //    }
-        //}
     }
 }
