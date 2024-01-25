@@ -1,14 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> 97973f6210d2d3dad700c715bd2f3d21f722e713
 
 namespace FlaskeAutomaten_Threads
 {
-    internal class Program
+    class Program
     {
+
         //static object _writeLock = new object();
         static void Main(string[] args)
         {
